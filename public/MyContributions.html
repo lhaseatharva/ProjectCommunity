@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Contributions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #cfeef1;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .menu {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .menu button {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 8px;
+        }
+
+        .menu button:hover {
+            background-color: #45a049;
+        }
+
+        .header {
+            background-color: #4CAF50;
+            color: #fff;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            padding: 25px;
+            margin-bottom: 500px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 300px;
+            width: 70%;
+            padding: 30px;
+            margin-bottom: 450px;
+        }
+
+        .grid-item {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .grid-item img {
+            width: 100%;
+            height: auto;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .grid-item .details {
+            padding: 10px;
+        }
+
+        .grid-item h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        .grid-item p {
+            color: #777;
+            margin: 5px 0;
+        }
+        .logout {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <button class="logout" onclick="logOut()">Log Out</button>
+    <div class="menu">
+        <button onclick="viewProfile()">Profile</button>
+        <button onclick="viewMessages()">Messages / Feedbacks</button>
+        <button onclick="viewDownloads()">My Downloads</button>
+    </div>
+
+    <div class="header">My Contributions</div>
+    <script>
+        function viewProfile(){
+            window.location.href="ContributerProfile.html";
+        }
+
+        function viewMessages(){
+            window.location.href="Feedbacks.html";
+        }
+
+        function viewDownloads(){
+            window.location.href="MyDownloads.html";
+        }
+
+        function logOut(){
+            window.location.href="Login.html"
+        }
+    </script>
+</body>
+</html>

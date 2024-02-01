@@ -1,82 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
+    <title>Welcome Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
             display: flex;
-            align-items: center;
             justify-content: center;
-            height: 100vh;
+            align-items: center;
+            min-height: 100vh;
+            background-size: cover;
+            background-position: center;
+            transition: background 1s ease-in-out;
+        }
+
+        .header {
+            background-color: rgba(76, 175, 80, 0.8);
+            color: #fff;
+            font-size: 24px;
+            font-weight: bold;
             text-align: center;
+            padding: 5px;
         }
 
-        .welcome-container {
-            background-color: #fff;
-            padding: 20px;
+        .slideshow-container {
+            display: none;
+        }
+
+        .mySlides {
+            display: none;
+        }
+
+        .menu {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .menu button {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 8px;
+        }
+
+        .menu button:hover {
+            background-color: #45a049;
+        }
+
+        .header {
+            background-color: #4CAF50;
+            color: #fff;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            padding: 5px;
+            margin-bottom: 800px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 300px;
+            width: 70%;
+            padding: 30px;
+            margin-bottom: 450px;
+        }
+
+        .grid-item {
+            border: 1px solid #ccc;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
         }
 
-        h1 {
+        .grid-item img {
+            width: 100%;
+            height: auto;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .grid-item .details {
+            padding: 10px;
+        }
+
+        .grid-item h3 {
+            margin: 0;
             color: #333;
         }
 
-        p {
-            color: #666;
+        .grid-item p {
+            color: #777;
+            margin: 5px 0;
         }
-
-        button {
+        .logout {
+            position: absolute;
+            top: 10px;
+            left: 10px;
             background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
+            color: #fff;
+            padding: 8px;
             border: none;
-            border-radius: 5px;
-            margin-top: 15px;
+            border-radius: 4px;
             cursor: pointer;
         }
 
-        button:hover {
-            background-color: #45a049;
+        .profile {
+            position: absolute;
+            top: 10px;
+            left: 80px;
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
         }
+
+        .allprojects {
+
+            position: absolute;
+            top: 10px;
+            left: 142px;
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .contributeproject {
+            
+            position: absolute;
+            top: 10px;
+            left: 235px;
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .slideshow-container {
+            max-width: 100%;
+            position: relative;
+            margin: auto;
+        }
+
+        .mySlides {
+            display: none;
+        }
+
+        .slideshow-container img {
+            width: 100%;
+            height: auto;
+        }
+
     </style>
-    <title>Welcome</title>
 </head>
-
 <body>
-    <div class="welcome-container">
-        <h1>Welcome to Project Community!</h1>
-        <p>Congratulations, you are now logged in.</p>
-
-        <!-- Add Project Button -->
-        <button onclick=viewFileUpload()>Add Project</button>
-
-        <!-- My Contributions Button -->
-        <button onclick="location.href='/my-contributions'">My Contributions</button>
-
-        <!-- Profile Button -->
-        <button onclick="location.href='/profile'">Profile</button>
-
-        <!-- My Downloads Button -->
-        <button onclick="location.href='/my-downloads'">My Downloads</button>
-
-        <!-- Logout Button -->
-        <form action="/logout" method="POST">
-            <button type="submit">Logout</button>
-        </form>
+    <button class="logout" onclick="logout()">Log Out</button>
+    <button class = "profile" onclick="viewProfile()">Profile</button>
+    <button class = "allprojects" onclick="viewProjects()">All Projects</button>
+    <button class = "contributeproject" onclick="viewFileUpload()">Contribute Project</button>
+    
+    <div class="menu">
+        <button onclick="navigate('contributions')">My Contributions</button>
+        <button onclick="navigate('messages')">Messages / Feedbacks</button>
+        <button onclick="navigate('downloads')">My Downloads</button>
+    </div>
+    <div class="header"><h5>Welcome to the PROJECT COMMUNITY !!!</h5>
+        <h6>"Feel the Joy of Sharing...!"</h6>  
     </div>
     <script>
-      function viewFileUpload(){
-        window.location.href="addproject.html"
-      }
+        let slideIndex = 0;
+        showSlides();
+
+        function viewFileUpload(){
+          window.location.href="addproject.html";
+        }
+
+        function viewProfile(){
+          window.location.href="ContributorProfile.html";
+        }
+
+        function viewProjects(){
+          window.location.href="AvailableProjects.html";
+        }
+
     </script>
 </body>
-
 </html>
