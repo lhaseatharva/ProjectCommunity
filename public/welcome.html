@@ -1,201 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome Page</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-size: cover;
-            background-position: center;
-            transition: background 1s ease-in-out;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-size: cover;
+      background-position: center;
+      background-color: #cfeef1;
+      ;
+    }
 
-        .header {
-            background-color: rgba(76, 175, 80, 0.8);
-            color: #fff;
-            font-size: 24px;
-            font-weight: bold;
-            text-align: center;
-            padding: 5px;
-        }
+    .header {
+      background-color: rgba(76, 175, 80, 0.8);
+      color: #fff;
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      padding: 5px;
+    }
 
-        .slideshow-container {
-            display: none;
-        }
+    .slideshow-container {
+      display: none;
+    }
 
-        .mySlides {
-            display: none;
-        }
+    .mySlides {
+      display: none;
+    }
 
-        .menu {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
+    .menu {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
 
-        .menu button {
-            background-color: #4CAF50;
-            color: #fff;
-            padding: 8px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-left: 8px;
-        }
+    .menu button {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 8px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 8px;
+    }
 
-        .menu button:hover {
-            background-color: #45a049;
-        }
+    .menu button:hover {
+      background-color: #45a049;
+    }
 
-        .header {
-            background-color: #4CAF50;
-            color: #fff;
-            font-size: 24px;
-            font-weight: bold;
-            text-align: center;
-            padding: 5px;
-            margin-bottom: 800px;
-        }
+    .header {
+      background-color: #4CAF50;
+      color: #fff;
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      padding: 5px;
+      margin-bottom: 800px;
+    }
 
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-            max-width: 300px;
-            width: 70%;
-            padding: 30px;
-            margin-bottom: 450px;
-        }
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      max-width: 300px;
+      width: 70%;
+      padding: 30px;
+      margin-bottom: 450px;
+    }
 
-        .grid-item {
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            overflow: hidden;
-        }
+    .grid-item {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      overflow: hidden;
+    }
 
-        .grid-item img {
-            width: 100%;
-            height: auto;
-            border-bottom: 1px solid #ccc;
-        }
+    .grid-item img {
+      width: 100%;
+      height: auto;
+      border-bottom: 1px solid #ccc;
+    }
 
-        .grid-item .details {
-            padding: 10px;
-        }
+    .grid-item .details {
+      padding: 10px;
+    }
 
-        .grid-item h3 {
-            margin: 0;
-            color: #333;
-        }
+    .grid-item h3 {
+      margin: 0;
+      color: #333;
+    }
 
-        .grid-item p {
-            color: #777;
-            margin: 5px 0;
-        }
-        .logout {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background-color: #4CAF50;
-            color: #fff;
-            padding: 8px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+    .grid-item p {
+      color: #777;
+      margin: 5px 0;
+    }
 
-        .profile {
-            position: absolute;
-            top: 10px;
-            left: 80px;
-            background-color: #4CAF50;
-            color: #fff;
-            padding: 8px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+    .logout {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 8px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
 
-        .allprojects {
+    .profile {
+      position: absolute;
+      top: 10px;
+      left: 80px;
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 8px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
 
-            position: absolute;
-            top: 10px;
-            left: 142px;
-            background-color: #4CAF50;
-            color: #fff;
-            padding: 8px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+    .allprojects {
 
-        .contributeproject {
-            
-            position: absolute;
-            top: 10px;
-            left: 235px;
-            background-color: #4CAF50;
-            color: #fff;
-            padding: 8px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .slideshow-container {
-            max-width: 100%;
-            position: relative;
-            margin: auto;
-        }
+      position: absolute;
+      top: 10px;
+      left: 142px;
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 8px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
 
-        .mySlides {
-            display: none;
-        }
+    .contributeproject {
 
-        .slideshow-container img {
-            width: 100%;
-            height: auto;
-        }
+      position: absolute;
+      top: 10px;
+      left: 235px;
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 8px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
 
-    </style>
+    .slideshow-container {
+      max-width: 100%;
+      position: relative;
+      margin: auto;
+    }
+
+    .mySlides {
+      display: none;
+    }
+
+    .slideshow-container img {
+      width: 100%;
+      height: auto;
+    }
+  </style>
 </head>
+
 <body>
-    <button class="logout" onclick="logout()">Log Out</button>
-    <button class = "profile" onclick="viewProfile()">Profile</button>
-    <button class = "allprojects" onclick="viewProjects()">All Projects</button>
-    <button class = "contributeproject" onclick="viewFileUpload()">Contribute Project</button>
-    
-    <div class="menu">
-        <button onclick="navigate('contributions')">My Contributions</button>
-        <button onclick="navigate('messages')">Messages / Feedbacks</button>
-        <button onclick="navigate('downloads')">My Downloads</button>
-    </div>
-    <div class="header"><h5>Welcome to the PROJECT COMMUNITY !!!</h5>
-        <h6>"Feel the Joy of Sharing...!"</h6>  
-    </div>
-    <script>
-        let slideIndex = 0;
-        showSlides();
+  <button class="logout" onclick="logout()">Log Out</button>
+  <button class="profile" onclick="viewProfile()">Profile</button>
+  <button class="allprojects" onclick="viewProjects()">All Projects</button>
+  <button class="contributeproject" onclick="viewFileUpload()">Contribute Project</button>
 
-        function viewFileUpload(){
-          window.location.href="addproject.html";
-        }
+  <div class="menu">
+    <button onclick="viewContribution()">My Contributions</button>
+    <button onclick="viewMessages()">Messages / Feedbacks</button>
+    <button onclick="viewDownloads()">My Downloads</button>
+  </div>
+  <div class="header">
+    <h5>Welcome to the PROJECT COMMUNITY !!!</h5>
+    <h6>"Feel the Joy of Sharing...!"</h6>
+  </div>
+  <script>
 
-        function viewProfile(){
-          window.location.href="ContributorProfile.html";
-        }
+    function viewFileUpload() {
+      window.location.href = "addproject.html";
+    }
 
-        function viewProjects(){
-          window.location.href="AvailableProjects.html";
-        }
+    function viewProfile() {
+      window.location.href = "ContributorProfile.html";
+    }
 
-    </script>
+    function viewProjects() {
+      window.location.href = "AvailableProjects.html";
+    }
+
+    function viewDownloads() {
+      window.location.href = "MyDownloads.html";
+    }
+    function viewContribution() {
+      window.location.href = "MyContributions.html";
+    }
+    function viewMessages() {
+      window.location.href = "Feedbacks.html";
+    }
+
+  </script>
 </body>
+
 </html>

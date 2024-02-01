@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
+    <title>Messages / Feedbacks</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -97,23 +97,24 @@
 <body>
     <button class="logout" onclick="logOut()">Log Out</button>
     <div class="menu">
+        <button onclick="viewProfile()">Profile</button>
         <button onclick="viewContributions()">My Contributions</button>
-        <button onclick="viewMessages()">Messages / Feedbacks</button>
         <button onclick="viewDownloads()">My Downloads</button>
     </div>
 
-    <div class="header">User Profile</div>
+    <div class="header">Messages / Feedbacks</div>
+
     <script>
-        function viewContributions(){
-            window.location.href="MyContributions.html"
+        function viewProfile(){
+            window.location.href="ContributorProfile.html";
         }
 
-        function viewMessages(){
-            window.location.href="Feedbacks.html"
+        function viewContributions(){
+            window.location.href="MyContributions.html";
         }
 
         function viewDownloads(){
-            window.location.href="MyDownloads.html"
+            window.location.href="MyDownloads.html";
         }
 
         function logOut(){

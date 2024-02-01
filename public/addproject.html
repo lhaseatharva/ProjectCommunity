@@ -8,13 +8,16 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #cfeef1;
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            position: relative;
+            /* Added to make the position absolute work */
         }
 
         .add-project-container {
+            width: 1500px;
             max-width: 600px;
             margin: 50px auto;
             padding: 20px;
@@ -24,8 +27,12 @@
         }
 
         h1 {
+            background-color: #4CAF50;
+            height: 100px;
             text-align: center;
-            color: #333;
+            color: white;
+            margin: 0;
+            line-height: 100px;
         }
 
         form {
@@ -98,6 +105,22 @@
         button:hover {
             background-color: #45a049;
         }
+
+        /* Top right buttons */
+        .top-right-buttons {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Top left button */
+        .top-left-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
     </style>
     <title>Add Project</title>
 </head>
@@ -118,8 +141,10 @@
             <input type="text" id="education" name="education" required>
 
             <label for="projectType">Project Type:</label>
-            <select id="projectType" name="projectType" required>
+            <select id="projectType" name="projectType" required
+                style="width: calc(100% - 20px); padding: 10px; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
                 <option value="research">Research/Review Paper</option>
+                <option value="source-code-file">Source Code Files</option>
                 <option value="documentation">Project Documentation</option>
                 <option value="images">Images</option>
                 <option value="prototype">Prototype Model</option>
@@ -127,6 +152,9 @@
 
             <label for="files">Upload Files:</label>
             <input type="file" id="files" name="files" multiple required>
+
+            <label for="expectedPrice">Expected Price:</label>
+            <input type="text" id="expectedPrice" name="expectedPrice" required>
 
             <!-- Toggle Switch for Enable Download -->
             <div class="toggle-container">
@@ -142,32 +170,66 @@
         </form>
     </div>
 
-    <script>
-    function submitForm() {
-        const form = document.getElementById('projectForm');
-        const formData = new FormData(form);
+    <!-- Top right buttons -->
+    <div class="top-right-buttons">
+        <button onclick="viewContribution()">My Contributions</button>
+        <button onclick="viewProfile()">Profile</button>
+        <button onclick="viewFeedback()">Messages</button>
+        <button onclick="viewDownloads()">Downloads</button>
+    </div>
 
-        // Send form data to the server using AJAX
-        fetch('http://127.0.0.1:3000/submitcontribution', {
-            method: 'POST',
-            body: formData,
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json(); // Parse the response as JSON
+    <!-- Top left button -->
+    <div class="top-left-button">
+        <button onclick="logout()">Log Out</button>
+    </div>
+
+    <script>
+        function submitForm() {
+            const form = document.getElementById('projectForm');
+            const formData = new FormData(form);
+
+            // Send form data to the server using AJAX
+            fetch('http://127.0.0.1:3000/submitcontribution', {
+                method: 'POST',
+                body: formData,
             })
-            .then(data => {
-                console.log(data);
-                // Handle the response as needed
-            })
-            .catch(error => {
-                console.error('Error during form submission:', error);
-                // Handle the error
-            });
-    }
-</script>
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json(); // Parse the response as JSON
+                })
+                .then(data => {
+                    console.log(data);
+                    // Handle the response as needed
+                    if (data.success) {
+                        console.log('Contribution submitted successfully!');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during form submission:', error);
+                    // Handle the error
+                });
+        }
+
+        function viewDownloads() {
+            window.location.href = "MyDownloads.html";
+        }
+        function viewContribution() {
+            window.location.href = "MyContributions.html";
+        }
+        function viewProfile() {
+            window.location.href = "ContributorProfile.html";
+        }
+        function viewFeedback() {
+            window.location.href = "Feedbacks.html";
+        }
+
+        function logout() {
+            // Implement logout logic
+            console.log('Logging out');
+        }
+    </script>
 
 </body>
 
