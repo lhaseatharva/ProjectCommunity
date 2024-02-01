@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
     <title>Login</title>
+    <style>
+        #forgotPassword{
+            text-align: center;
+            color: black;
+            margin-left: 50px;
+        }
+    </style>
 </head>
 
 <body>
@@ -20,17 +27,21 @@
         <button type="submit">Login</button>
 
         <p>Don't have an account? <a href="register.html">Register</a></p>
+
+        <!-- Add Forgot Password link -->
+        <p><a href="#" id="forgotPassword">Forgot Password?</a></p>
     </form>
+
     <script>
-        document.getElementById('loginForm').addEventListener('submit', loginUser); // Attach event listener to the form
+        document.getElementById('loginForm').addEventListener('submit', loginUser);
+        document.getElementById('forgotPassword').addEventListener('click', showForgotPassword);
 
         function loginUser(event) {
-            event.preventDefault(); // Prevent default form submission
+            event.preventDefault();
 
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            // Send login data to the server using AJAX
             fetch('http://127.0.0.1:3000/auth/login', {
                 method: 'POST',
                 headers: {
@@ -42,7 +53,7 @@
                 .then(data => {
                     if (data.success) {
                         console.log('Logged in successfully');
-                        window.location.href = "welcome.html"; // Redirect directly upon success
+                        window.location.href = "welcome.html";
                     } else {
                         alert("Login failed. " + data.message);
                     }
@@ -51,6 +62,33 @@
                     console.error('Error during login:', error);
                     alert('Error during login. Please try again.');
                 });
+        }
+
+        // Function to show a dialog for forgot password
+        function showForgotPassword() {
+            const email = prompt('Enter your email to reset the password:');
+            if (email) {
+                // Send the email to the server for further processing (e.g., sending a reset email)
+                fetch('http://127.0.0.1:3000/auth/forgot-password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Password reset instructions sent to your email.');
+                        } else {
+                            alert('Failed to initiate password reset. ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error during forgot password:', error);
+                        alert('Error during forgot password. Please try again.');
+                    });
+            }
         }
     </script>
 </body>

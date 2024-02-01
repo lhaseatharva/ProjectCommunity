@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createUserWithEmailAndPassword, signInWithEmailAndPassword } = require("firebase/auth");
+const { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } = require("firebase/auth");
 
 // Define auth as a parameter
 const initializeAuth = (auth) => {
@@ -11,7 +11,7 @@ const initializeAuth = (auth) => {
         createUserWithEmailAndPassword(auth, email, password)
             .then(userCredential => {
                 // Handle successful registration
-                const user = userCredential.user; 
+                const user = userCredential.user;
                 res.json({ success: true });
             })
             .catch(error => {
@@ -33,6 +33,20 @@ const initializeAuth = (auth) => {
             })
             .catch(error => {
                 // Handle login errors
+                console.error(error.message);
+                res.json({ success: false, message: error.message });
+            });
+    });
+    router.post('/forgot-password', (req, res) => {
+        const { email } = req.body;
+
+        sendPasswordResetEmail(auth, email)
+            .then(() => {
+                // Password reset email sent successfully
+                res.json({ success: true });
+            })
+            .catch(error => {
+                // Handle errors during password reset
                 console.error(error.message);
                 res.json({ success: false, message: error.message });
             });

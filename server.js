@@ -1,7 +1,7 @@
 const express = require('express');
 const { initializeApp } = require("firebase/app");
-const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } = require("firebase/auth");
-const { getFirestore, collection, addDoc, serverTimestamp } = require("firebase/firestore");
+const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } = require("firebase/auth");
+const { getFirestore, collection, addDoc, getDocs, serverTimestamp } = require("firebase/firestore");
 const { getStorage, ref: storageRef, uploadBytes } = require("firebase/storage");
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -47,37 +47,69 @@ const authRoutes = require('./routes/auth')(auth); // Pass auth to the routes
 appExpress.use('/auth', cors(corsOptions), authRoutes);
 
 // Routes
+
+appExpress.post('/forgot-password', async (req, res) => {
+    try {
+        const email = req.body.email;
+
+        // Send password reset email using Firebase's sendPasswordResetEmail method
+        await sendPasswordResetEmail(auth, email);
+
+        res.json({ success: true, message: 'Password reset instructions sent to your email.' });
+    } catch (error) {
+        console.error('Error during forgot password:', error);
+        res.status(500).json({ success: false, message: 'Internal Server Error.' });
+    }
+});
+
 appExpress.post('/submitcontribution', uploadMulter.array('files'), async (req, res) => {
     try {
-        const contributorName = req.body.contributorName;
-        const contactNumber = req.body.contactNumber;
-        const education = req.body.education;
-        const projectType = req.body.projectType;
-        const expectedPrice = req.body.expectedPrice;
-        const enableDownload = req.body.enableDownload === 'on';
+        // Listen for changes in the authentication state
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            try {
+                if (!user) {
+                    res.status(403).send('Unauthorized'); // Return 403 Forbidden if the user is not authenticated
+                    return;
+                }
 
-        // Store contribution metadata in Firestore
-        const contributionsRef = collection(db, 'Contributions');
-        const newContributionRef = await addDoc(contributionsRef, {
-            contributorName,
-            contactNumber,
-            education,
-            projectType,
-            enableDownload,
-            expectedPrice,
-            timestamp: serverTimestamp(),
+                const contributorName = req.body.contributorName;
+                const contactNumber = req.body.contactNumber;
+                const education = req.body.education;
+                const projectType = req.body.projectType;
+                const expectedPrice = req.body.expectedPrice;
+                const enableDownload = req.body.enableDownload === 'on';
+
+                // Store contribution metadata in Firestore
+                const contributionsRef = collection(db, 'Contributions');
+                const newContributionRef = await addDoc(contributionsRef, {
+                    contributorName,
+                    contactNumber,
+                    education,
+                    projectType,
+                    enableDownload,
+                    expectedPrice,
+                    contributorId: user.uid,
+                    timestamp: serverTimestamp(),
+                });
+
+                // Upload file(s) to Firebase Storage
+                const files = req.files;
+                const promises = files.map(async (file) => {
+                    const fileRef = storageRef(storage, `contributions/${newContributionRef.id}/${file.originalname}`);
+                    await uploadBytes(fileRef, file.buffer);
+                });
+
+                await Promise.all(promises);
+
+                res.status(200).send('Contribution submitted successfully.');
+            } catch (error) {
+                console.error('Error during contribution submission:', error);
+                res.status(500).send('Internal Server Error.');
+            } finally {
+                // Unsubscribe to avoid memory leaks
+                unsubscribe();
+            }
         });
-
-        // Upload file(s) to Firebase Storage
-        const files = req.files;
-        const promises = files.map(async (file) => {
-            const fileRef = storageRef(storage, `contributions/${newContributionRef.id}/${file.originalname}`);
-            await uploadBytes(fileRef, file.buffer);
-        });
-
-        await Promise.all(promises);
-
-        res.status(200).send('Contribution submitted successfully.');
     } catch (error) {
         console.error('Error during contribution submission:', error);
         res.status(500).send('Internal Server Error.');
@@ -94,7 +126,7 @@ appExpress.get('/welcome', (req, res) => {
     const user = auth.currentUser;
 
     if (user) {
-        res.sendFile(__dirname+ '/public/welcome.html');
+        res.sendFile(__dirname + '/public/welcome.html');
     } else {
         res.redirect('/login'); // Redirect to login if the user is not logged in
     }
@@ -110,6 +142,34 @@ appExpress.post('/logout', (req, res) => {
             console.error(error.message);
             res.redirect('/welcome'); // Redirect back to welcome page on error
         });
+});
+
+appExpress.get('/fetchprojects', async (req, res) => {
+    try {
+        const contributionsRef = collection(db, 'Contributions');
+        const snapshot = await getDocs(contributionsRef);
+
+        const projects = [];
+        snapshot.forEach(doc => {
+            const projectData = doc.data();
+            projects.push({
+                id: doc.id,
+                contributorName: projectData.contributorName,
+                contactNumber: projectData.contactNumber,
+                education: projectData.education,
+                projectType: projectData.projectType,
+                enableDownload: projectData.enableDownload,
+                expectedPrice: projectData.expectedPrice,
+                timestamp: projectData.timestamp,
+                // Add other fields as needed
+            });
+        });
+
+        res.json({ success: true, projects });
+    } catch (error) {
+        console.error('Error fetching projects:', error);
+        res.status(500).json({ success: false, message: 'Internal Server Error.' });
+    }
 });
 
 // Start the server

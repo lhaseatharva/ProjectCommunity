@@ -188,7 +188,6 @@
             const form = document.getElementById('projectForm');
             const formData = new FormData(form);
 
-            // Send form data to the server using AJAX
             fetch('http://127.0.0.1:3000/submitcontribution', {
                 method: 'POST',
                 body: formData,
