@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Registration</title>
+    <script>
+        function registerUser() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // Validate password and confirm password
+            if (password !== confirmPassword) {
+                alert("Passwords do not match.");
+                return;
+            }
+
+            // Send registration data to the server using AJAX
+            fetch('http://127.0.0.1:3000/auth/register', {  // Update the URL if your server is running on a different port
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Registration successful. Redirecting to login page.");
+                        window.location.href = "login.html";
+                    } else {
+                        alert("Registration failed. " + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during registration:', error);
+                    alert('Error during registration. Please try again.');
+                });
+        }
+    </script>
+</head>
+
+<body>
+    <form id="registrationForm" onsubmit="registerUser(); return false;">
+        <h1>Registration</h1>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password"
+            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+            title="Password must contain at least one uppercase letter, one lowercase letter, one numeric, and one special character. Minimum length is 8 characters."
+            required>
+
+        <label for="confirmPassword">Confirm Password:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required>
+
+        <button type="submit">Register</button>
+
+        <p>Already have an account? <a href="login.html">Login</a></p>
+    </form>
+</body>
+
+</html>

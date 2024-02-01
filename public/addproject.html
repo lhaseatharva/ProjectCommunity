@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css"> <!-- Include your stylesheet here -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .add-project-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .toggle-label {
+            margin-right: 10px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            border-radius: 34px;
+            transition: 0.4s;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            border-radius: 50%;
+            transition: 0.4s;
+        }
+
+        input:checked+.toggle-slider {
+            background-color: #4CAF50;
+        }
+
+        input:checked+.toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <title>Add Project</title>
+</head>
+
+<body>
+    <div class="add-project-container">
+        <h1>Add Project</h1>
+
+        <!-- Use FormData to handle file uploads -->
+        <form id="projectForm" enctype="multipart/form-data">
+            <label for="contributorName">Contributor Name:</label>
+            <input type="text" id="contributorName" name="contributorName" required>
+
+            <label for="contactNumber">Contact Number:</label>
+            <input type="tel" id="contactNumber" name="contactNumber" required>
+
+            <label for="education">Education:</label>
+            <input type="text" id="education" name="education" required>
+
+            <label for="projectType">Project Type:</label>
+            <select id="projectType" name="projectType" required>
+                <option value="research">Research/Review Paper</option>
+                <option value="documentation">Project Documentation</option>
+                <option value="images">Images</option>
+                <option value="prototype">Prototype Model</option>
+            </select>
+
+            <label for="files">Upload Files:</label>
+            <input type="file" id="files" name="files" multiple required>
+
+            <!-- Toggle Switch for Enable Download -->
+            <div class="toggle-container">
+                <label class="toggle-label" for="enableDownload">Enable Download?</label>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="enableDownload" name="enableDownload">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="button" onclick="submitForm()">Submit Contribution</button>
+        </form>
+    </div>
+
+    <script>
+    function submitForm() {
+        const form = document.getElementById('projectForm');
+        const formData = new FormData(form);
+
+        // Send form data to the server using AJAX
+        fetch('http://127.0.0.1:3000/submitcontribution', {
+            method: 'POST',
+            body: formData,
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json(); // Parse the response as JSON
+            })
+            .then(data => {
+                console.log(data);
+                // Handle the response as needed
+            })
+            .catch(error => {
+                console.error('Error during form submission:', error);
+                // Handle the error
+            });
+    }
+</script>
+
+</body>
+
+</html>
