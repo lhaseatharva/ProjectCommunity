@@ -30,6 +30,7 @@ const initializeAuth = (auth) => {
             .then(userCredential => {
                 // Handle successful login
                 res.json({ success: true });
+                console.log('Logged in successfully');
             })
             .catch(error => {
                 // Handle login errors

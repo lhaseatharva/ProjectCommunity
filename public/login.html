@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/style.css">
     <title>Login</title>
     <style>
-        #forgotPassword{
+        #forgotPassword {
             text-align: center;
             color: black;
             margin-left: 50px;
@@ -66,7 +66,8 @@
 
         // Function to show a dialog for forgot password
         function showForgotPassword() {
-            const email = prompt('Enter your email to reset the password:');
+            const email = document.getElementById('email').value;
+
             if (email) {
                 // Send the email to the server for further processing (e.g., sending a reset email)
                 fetch('http://127.0.0.1:3000/auth/forgot-password', {
@@ -88,8 +89,11 @@
                         console.error('Error during forgot password:', error);
                         alert('Error during forgot password. Please try again.');
                     });
+            } else {
+                alert('Please enter your email to initiate password reset.');
             }
         }
+
     </script>
 </body>
 
