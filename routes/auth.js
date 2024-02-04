@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } = require("firebase/auth");
+const { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged} = require("firebase/auth");
 
 // Define auth as a parameter
 const initializeAuth = (auth) => {

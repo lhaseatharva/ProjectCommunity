@@ -185,31 +185,43 @@
 
     <script>
         function submitForm() {
-            const form = document.getElementById('projectForm');
-            const formData = new FormData(form);
+    const form = document.getElementById('projectForm');
+    const formData = new FormData(form);
 
-            fetch('http://127.0.0.1:3000/submitcontribution', {
-                method: 'POST',
-                body: formData,
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    return response.json(); // Parse the response as JSON
-                })
-                .then(data => {
-                    console.log(data);
-                    // Handle the response as needed
-                    if (data.success) {
-                        console.log('Contribution submitted successfully!');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error during form submission:', error);
-                    // Handle the error
-                });
+    fetch('http://127.0.0.1:3000/submitcontribution', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
+
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            throw new Error('Invalid content type. Expected JSON.');
+        }
+
+        return response.text(); // Retrieve the entire response text
+    })
+    .then(data => {
+        console.log('Raw Response Text:', data); // Log the entire response text
+        const jsonData = JSON.parse(data); // Try to parse as JSON
+        console.log('Parsed JSON:', jsonData);
+
+        // Continue handling the response as needed
+        if (jsonData.success) {
+            console.log('Contribution submitted successfully!');
+        } else {
+            console.error('Contribution submission failed:', jsonData.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error during form submission:', error);
+        // Handle the error
+    });
+}
+
 
         function viewDownloads() {
             window.location.href = "MyDownloads.html";

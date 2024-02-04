@@ -64,52 +64,35 @@ appExpress.post('/forgot-password', async (req, res) => {
 
 appExpress.post('/submitcontribution', uploadMulter.array('files'), async (req, res) => {
     try {
-        // Listen for changes in the authentication state
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            try {
-                if (!user) {
-                    res.status(403).send('Unauthorized'); // Return 403 Forbidden if the user is not authenticated
-                    return;
-                }
+        const contributorName = req.body.contributorName;
+        const contactNumber = req.body.contactNumber;
+        const education = req.body.education;
+        const projectType = req.body.projectType;
+        const expectedPrice = req.body.expectedPrice;
+        const enableDownload = req.body.enableDownload === 'on';
 
-                const contributorName = req.body.contributorName;
-                const contactNumber = req.body.contactNumber;
-                const education = req.body.education;
-                const projectType = req.body.projectType;
-                const expectedPrice = req.body.expectedPrice;
-                const enableDownload = req.body.enableDownload === 'on';
-
-                // Store contribution metadata in Firestore
-                const contributionsRef = collection(db, 'Contributions');
-                const newContributionRef = await addDoc(contributionsRef, {
-                    contributorName,
-                    contactNumber,
-                    education,
-                    projectType,
-                    enableDownload,
-                    expectedPrice,
-                    contributorId: user.uid,
-                    timestamp: serverTimestamp(),
-                });
-
-                // Upload file(s) to Firebase Storage
-                const files = req.files;
-                const promises = files.map(async (file) => {
-                    const fileRef = storageRef(storage, `contributions/${newContributionRef.id}/${file.originalname}`);
-                    await uploadBytes(fileRef, file.buffer);
-                });
-
-                await Promise.all(promises);
-
-                res.status(200).send('Contribution submitted successfully.');
-            } catch (error) {
-                console.error('Error during contribution submission:', error);
-                res.status(500).send('Internal Server Error.');
-            } finally {
-                // Unsubscribe to avoid memory leaks
-                unsubscribe();
-            }
+        // Store contribution metadata in Firestore
+        const contributionsRef = collection(db, 'Contributions');
+        const newContributionRef = await addDoc(contributionsRef, {
+            contributorName,
+            contactNumber,
+            education,
+            projectType,
+            enableDownload,
+            expectedPrice,
+            timestamp: serverTimestamp(),
         });
+
+        // Upload file(s) to Firebase Storage
+        const files = req.files;
+        const promises = files.map(async (file) => {
+            const fileRef = storageRef(storage, `contributions/${newContributionRef.id}/${file.originalname}`);
+            await uploadBytes(fileRef, file.buffer);
+        });
+
+        await Promise.all(promises);
+
+        res.status(200).send('Contribution submitted successfully.');
     } catch (error) {
         console.error('Error during contribution submission:', error);
         res.status(500).send('Internal Server Error.');
