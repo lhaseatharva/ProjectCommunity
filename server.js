@@ -1,7 +1,7 @@
 const express = require('express');
 const { initializeApp } = require("firebase/app");
 const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } = require("firebase/auth");
-const { getFirestore, collection, addDoc, getDocs, serverTimestamp } = require("firebase/firestore");
+const { getFirestore, collection, addDoc, getDocs, serverTimestamp, query, where } = require("firebase/firestore");
 const { getStorage, ref: storageRef, uploadBytes } = require("firebase/storage");
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -154,6 +154,31 @@ appExpress.get('/fetchprojects', async (req, res) => {
         res.status(500).json({ success: false, message: 'Internal Server Error.' });
     }
 });
+
+appExpress.get('/userprofile', async (req, res) => {
+    try {
+        // Query Firestore for all documents in the Contributions collection
+        const contributionsRef = collection(db, 'Contributions');
+        const querySnapshot = await getDocs(contributionsRef);
+
+        const userProfileData = [];
+        querySnapshot.forEach(doc => {
+            const userData = doc.data();
+            // Extract only the required fields
+            userProfileData.push({
+                contributorName: userData.contributorName,
+                contactNumber: userData.contactNumber,
+                education: userData.education,
+            });
+        });
+
+        res.json({ success: true, userProfileData });
+    } catch (error) {
+        console.error('Error fetching user profile:', error);
+        res.status(500).json({ success: false, message: 'Internal Server Error.' });
+    }
+});
+
 
 // Start the server
 const PORT = process.env.PORT || 3000;

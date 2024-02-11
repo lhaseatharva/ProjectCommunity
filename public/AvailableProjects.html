@@ -147,7 +147,7 @@
   <button class="addproject" onclick="addproject()">Add Project</button>
   <button class="logout" onclick="logOut()">Log Out</button>
   <div class="menu">
-    <button onclick="viewProfile()">Profile</button>
+    <button onclick="viewProfile()">My Profile</button>
     <button onclick="viewContribution()">My Contributions</button>
     <button onclick="viewFeedback()">Messages / Feedbacks</button>
     <button onclick="viewDownloads()">My Downloads</button>
@@ -224,16 +224,27 @@
       }
     }
 
+    async function viewProfile() {
+      try {
+        const response = await fetch('http://127.0.0.1:3000/userprofile');
+        const data = await response.json();
+
+        if (data.success) {
+          window.location.href = "ContributorProfile.html";
+        } else {
+          console.error('Error fetching user profile:', data.message);
+        }
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      }
+    }
+
     function viewDownloads() {
       window.location.href = "MyDownloads.html";
     }
 
     function viewContribution() {
       window.location.href = "MyContributions.html";
-    }
-
-    function viewProfile() {
-      window.location.href = "ContributorProfile.html";
     }
 
     function viewFeedback() {
