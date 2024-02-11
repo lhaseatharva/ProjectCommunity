@@ -7,17 +7,26 @@
     <link rel="stylesheet" href="css/style.css">
     <title>Login</title>
     <style>
+        body {
+            background-color: #cfeef1;
+        }
         #forgotPassword {
             text-align: center;
             color: black;
             margin-left: 50px;
+        }
+        h1{
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            margin-top: 0%;
         }
     </style>
 </head>
 
 <body>
     <form id="loginForm">
-        <h1>Login</h1>
+        <h1>Log in Here</h1>
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
 
@@ -52,7 +61,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        console.log('Logged in successfully');
+                        alert('Logged in successfully');
                         window.location.href = "welcome.html";
                     } else {
                         alert("Login failed. " + data.message);

@@ -43,6 +43,7 @@
             font-weight: bold;
             text-align: center;
             padding: 25px;
+            margin-top: 10px;
             margin-bottom: 875px;
         }
 
@@ -92,9 +93,22 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
+        .viewProjects {
+            position: absolute;
+            top: 10px;
+            left: 85px;
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+    <button class="viewProjects" onclick="viewProjects()">Available Projects</button>
     <button class="logout" onclick="logOut()">Log Out</button>
     <div class="menu">
         <button onclick="viewProfile()">Profile</button>
@@ -104,6 +118,9 @@
 
     <div class="header">My Contributions</div>
     <script>
+          function viewProjects(){
+            window.location.href="AvailableProjects.html"
+        }
         function viewProfile(){
             window.location.href="ContributorProfile.html";
         }

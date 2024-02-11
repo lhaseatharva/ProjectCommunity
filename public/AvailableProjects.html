@@ -45,8 +45,8 @@
       font-weight: bold;
       text-align: center;
       padding: 15px;
+      margin-top: 10px;
       margin-bottom: auto;
-      /* Adjusted margin */
     }
 
     .grid-container {
@@ -56,13 +56,13 @@
       max-width: 1200px;
       margin: 0 auto;
       margin-bottom: auto;
-      /* Adjusted margin */
     }
 
     .grid-item {
-      border: 1px solid #ccc;
+      border: 1px solid #121312;
       border-radius: 8px;
       overflow: hidden;
+      background-color: #a6f7a4;
     }
 
     .grid-item img {
@@ -77,11 +77,11 @@
 
     .grid-item h3 {
       margin: 0;
-      color: #333;
+      color: #0a0a0a;
     }
 
     .grid-item p {
-      color: #777;
+      color: #0e0d0d;
       margin: 5px 0;
     }
 
@@ -106,6 +106,38 @@
       padding: 8px;
       border: none;
       border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .download-button {
+      align-items: center;
+      margin-left: 34%;
+      margin-bottom: 5%;
+      background-color: #4caf50;
+      border:#0a0a0a;
+      color: #fff;
+      border: none;
+      height: 25px;
+      border-radius: 4px;
+    }
+
+    .download-button:hover {
+      cursor: pointer;
+    }
+
+    .feedback-button {
+      height: 25px;
+      align-items: center;
+      margin-left: 10px;
+      margin-bottom: 5%;
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .feedback-button:hover {
       cursor: pointer;
     }
   </style>
@@ -164,25 +196,23 @@
             downloadButton.className = 'download-button';
             downloadButton.textContent = 'Download';
             downloadButton.onclick = function () {
-              // Add your download logic here
-              // For example, you can redirect to a download URL or trigger a download action
               if (project.enableDownload) {
-                // Replace this line with your download logic
-                console.log('Downloading project:', project.projectType);
+                console.log('Downloading project...', project.projectType);
               } else {
-                console.log('Download is not enabled for this project:', project.projectType);
+                console.log('Download is not enabled for this project !', project.projectType);
               }
             };
 
-            const downloadIcon = document.createElement('span');
-            downloadIcon.className = 'download-icon';
-            // You can replace the content with your preferred download icon
-            downloadIcon.textContent = '\u2B07';
-
-            downloadButton.appendChild(downloadIcon);
+            const feedbackButton = document.createElement('button');
+            feedbackButton.className = 'feedback-button';
+            feedbackButton.textContent = 'Give Feedback';
+            feedbackButton.onclick = function () {
+              console.log('Giving feedback for project...', project.projectType);
+            };
 
             gridItem.appendChild(detailsContainer);
             gridItem.appendChild(downloadButton);
+            gridItem.appendChild(feedbackButton);
 
             projectGrid.appendChild(gridItem);
           });
@@ -197,15 +227,19 @@
     function viewDownloads() {
       window.location.href = "MyDownloads.html";
     }
+
     function viewContribution() {
       window.location.href = "MyContributions.html";
     }
+
     function viewProfile() {
-      window.location.href = "ContributerProfile.html";
+      window.location.href = "ContributorProfile.html";
     }
+
     function viewFeedback() {
       window.location.href = "Feedbacks.html";
     }
+
     function addproject() {
       window.location.href = "addproject.html";
     }
@@ -214,7 +248,6 @@
       window.location.href = "login.html";
     }
 
-    // Call the function when the page loads
     fetchAndDisplayProjects();
   </script>
 </body>
