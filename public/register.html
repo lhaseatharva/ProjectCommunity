@@ -10,6 +10,8 @@
         function registerUser() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const name = document.getElementById('name').value;
+            const qualification = document.getElementById('education').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
 
             // Validate password and confirm password
@@ -24,7 +26,7 @@
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ name, email, password, qualification }),
             })
                 .then(response => response.json())
                 .then(data => {
@@ -56,6 +58,13 @@
 <body>
     <form id="registrationForm" onsubmit="registerUser(); return false;">
         <h1>Get Registered</h1>
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="education">Educational Qualification:</label>
+        <input type="text" id="education" name="education" required>
+
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
 

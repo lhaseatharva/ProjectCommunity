@@ -47,6 +47,7 @@
       padding: 15px;
       margin-top: 10px;
       margin-bottom: auto;
+      /* Adjusted margin */
     }
 
     .grid-container {
@@ -56,13 +57,14 @@
       max-width: 1200px;
       margin: 0 auto;
       margin-bottom: auto;
+      /* Adjusted margin */
     }
 
     .grid-item {
       border: 1px solid #121312;
       border-radius: 8px;
       overflow: hidden;
-      background-color: #a6f7a4;
+      background-color:#a6f7a4 ;
     }
 
     .grid-item img {
@@ -109,35 +111,15 @@
       cursor: pointer;
     }
 
-    .download-button {
+    .download-button{
+
       align-items: center;
       margin-left: 34%;
       margin-bottom: 5%;
       background-color: #4caf50;
-      border:#0a0a0a;
-      color: #fff;
-      border: none;
-      height: 25px;
-      border-radius: 4px;
     }
 
-    .download-button:hover {
-      cursor: pointer;
-    }
-
-    .feedback-button {
-      height: 25px;
-      align-items: center;
-      margin-left: 10px;
-      margin-bottom: 5%;
-      background-color: #4caf50;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    .feedback-button:hover {
+    .download-button:hover{
       cursor: pointer;
     }
   </style>
@@ -147,7 +129,7 @@
   <button class="addproject" onclick="addproject()">Add Project</button>
   <button class="logout" onclick="logOut()">Log Out</button>
   <div class="menu">
-    <button onclick="viewProfile()">My Profile</button>
+    <button onclick="viewProfile()">Profile</button>
     <button onclick="viewContribution()">My Contributions</button>
     <button onclick="viewFeedback()">Messages / Feedbacks</button>
     <button onclick="viewDownloads()">My Downloads</button>
@@ -196,23 +178,25 @@
             downloadButton.className = 'download-button';
             downloadButton.textContent = 'Download';
             downloadButton.onclick = function () {
+              // Add your download logic here
+              // For example, you can redirect to a download URL or trigger a download action
               if (project.enableDownload) {
+                // Replace this line with your download logic
                 console.log('Downloading project...', project.projectType);
               } else {
                 console.log('Download is not enabled for this project !', project.projectType);
               }
             };
 
-            const feedbackButton = document.createElement('button');
-            feedbackButton.className = 'feedback-button';
-            feedbackButton.textContent = 'Give Feedback';
-            feedbackButton.onclick = function () {
-              console.log('Giving feedback for project...', project.projectType);
-            };
+            const downloadIcon = document.createElement('span');
+            downloadIcon.className = 'download-icon';
+            // You can replace the content with your preferred download icon
+            downloadIcon.textContent = '\u2B07';
+
+            downloadButton.appendChild(downloadIcon);
 
             gridItem.appendChild(detailsContainer);
             gridItem.appendChild(downloadButton);
-            gridItem.appendChild(feedbackButton);
 
             projectGrid.appendChild(gridItem);
           });
@@ -224,33 +208,18 @@
       }
     }
 
-    async function viewProfile() {
-      try {
-        const response = await fetch('http://127.0.0.1:3000/userprofile');
-        const data = await response.json();
-
-        if (data.success) {
-          window.location.href = "ContributorProfile.html";
-        } else {
-          console.error('Error fetching user profile:', data.message);
-        }
-      } catch (error) {
-        console.error('Error fetching user profile:', error);
-      }
-    }
-
     function viewDownloads() {
       window.location.href = "MyDownloads.html";
     }
-
     function viewContribution() {
       window.location.href = "MyContributions.html";
     }
-
+    function viewProfile() {
+      window.location.href = "ContributorProfile.html";
+    }
     function viewFeedback() {
       window.location.href = "Feedbacks.html";
     }
-
     function addproject() {
       window.location.href = "addproject.html";
     }
@@ -259,6 +228,7 @@
       window.location.href = "login.html";
     }
 
+    // Call the function when the page loads
     fetchAndDisplayProjects();
   </script>
 </body>

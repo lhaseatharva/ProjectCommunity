@@ -122,42 +122,36 @@
         }
 
         .header {
-        background-color: #4caf50;
-        color: #fff;
-        font-size: 24px;
-        font-weight: bold;
-        text-align: center;
-        padding-top: 5px;
-        line-height: 100px;
-      }
+            background-color: #4caf50;
+            color: #fff;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            padding-top: 5px;
+            line-height: 100px;
+        }
 
-      .allProjects {
-        margin-left: 50px;
-        padding: 100px;
-      }
+        .allProjects {
+            margin-left: 50px;
+            padding: 100px;
+        }
     </style>
     <title>Add Project</title>
 </head>
 
 <body>
     <div class="add-project-container">
-        <h1>Add Project</h1>
         <div class="header">Contribute to the Community</div>
 
-        <!-- Use FormData to handle file uploads -->
         <form id="projectForm" enctype="multipart/form-data">
-            <label for="contributorName">Contributor Name:</label>
-            <input type="text" id="contributorName" name="contributorName" required>
+            <label for="projectName">Project Title:</label>
+            <input type="text" id="projectName" name="projectName" required>
 
             <label for="contactNumber">Contact Number:</label>
             <input type="tel" id="contactNumber" name="contactNumber" required>
 
-            <label for="education">Education:</label>
-            <input type="text" id="education" name="education" required>
-
             <label for="projectType">Project Type:</label>
-            <select id="projectType" name="projectType" required
-                style="width: calc(100% - 20px); padding: 10px; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            <select id="projectType" name="projectType" required>
                 <option value="research">Research/Review Paper</option>
                 <option value="source-code-file">Source Code Files</option>
                 <option value="documentation">Project Documentation</option>
@@ -171,32 +165,18 @@
             <label for="expectedPrice">Expected Price:</label>
             <input type="text" id="expectedPrice" name="expectedPrice" required>
 
-            <!-- Toggle Switch for Enable Download -->
             <div class="toggle-container">
-                <label class="toggle-label" for="enableDownload">Enable Download?</label>
+                <label class="toggle-label" for="enableDownload">Enable Download ?</label>
                 <div class="toggle-switch">
                     <input type="checkbox" id="enableDownload" name="enableDownload">
                     <div class="toggle-slider"></div>
                 </div>
             </div>
 
-            <!-- Submit Button -->
             <button type="button" onclick="submitForm()">Submit Contribution</button>
         </form>
     </div>
 
-    <!-- Top right buttons -->
-    <div class="top-right-buttons">
-        <button onclick="viewContribution()">My Contributions</button>
-        <button onclick="viewProfile()">Profile</button>
-        <button onclick="viewFeedback()">Messages</button>
-        <button onclick="viewDownloads()">Downloads</button>
-    </div>
-
-    <!-- Top left button -->
-    <div class="top-left-button">
-        <button onclick="logout()">Log Out</button>
-    </div>
     <script>
         function submitForm() {
             const form = document.getElementById('projectForm');
@@ -210,13 +190,13 @@
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
                     }
-                    return response.json(); // Parse the response as JSON
+                    return response.json(); 
                 })
                 .then(data => {
                     console.log(data);
-                    // Handle the response as needed
                     if (data.success) {
                         alert('Contribution submitted successfully!');
+                        window.location.href = "welcome.html"; // Redirect to welcome page on success
                     }
                 })
                 .catch(error => {
@@ -224,25 +204,7 @@
                     // Handle the error
                 });
         }
-
-        function viewDownloads() {
-            window.location.href = "MyDownloads.html";
-        }
-        function viewContribution() {
-            window.location.href = "MyContributions.html";
-        }
-        function viewProfile() {
-            window.location.href = "ContributorProfile.html";
-        }
-        function viewFeedback() {
-            window.location.href = "Feedbacks.html";
-        }
-        function logout() {
-            window.location.href = "login.html";
-        }
-
     </script>
-
 </body>
 
 </html>

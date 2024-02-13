@@ -1,7 +1,7 @@
 const express = require('express');
 const { initializeApp } = require("firebase/app");
 const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } = require("firebase/auth");
-const { getFirestore, collection, addDoc, getDocs, serverTimestamp, query, where } = require("firebase/firestore");
+const { getFirestore, collection, addDoc, getDocs, serverTimestamp } = require("firebase/firestore");
 const { getStorage, ref: storageRef, uploadBytes } = require("firebase/storage");
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -16,6 +16,7 @@ const corsOptions = {
 const firebaseConfig = {
     apiKey: "AIzaSyAhzlH8qamQF5RTUu9QYeDRdaAUdN1Gv8E",
     authDomain: "project-community-27dac.firebaseapp.com",
+    databaseURL: "https://project-community-27dac-default-rtdb.firebaseio.com",
     projectId: "project-community-27dac",
     storageBucket: "project-community-27dac.appspot.com",
     messagingSenderId: "441333565655",
@@ -64,26 +65,18 @@ appExpress.post('/forgot-password', async (req, res) => {
 
 appExpress.post('/submitcontribution', uploadMulter.array('files'), async (req, res) => {
     try {
-        const contributorName = req.body.contributorName;
-        const contactNumber = req.body.contactNumber;
-        const education = req.body.education;
-        const projectType = req.body.projectType;
-        const expectedPrice = req.body.expectedPrice;
-        const enableDownload = req.body.enableDownload === 'on';
+        const { projectName, contactNumber, projectType, expectedPrice, enableDownload } = req.body;
 
-        // Store contribution metadata in Firestore
         const contributionsRef = collection(db, 'Contributions');
         const newContributionRef = await addDoc(contributionsRef, {
-            contributorName,
+            projectName,
             contactNumber,
-            education,
             projectType,
-            enableDownload,
             expectedPrice,
+            enableDownload: enableDownload === 'on',
             timestamp: serverTimestamp(),
         });
 
-        // Upload file(s) to Firebase Storage
         const files = req.files;
         const promises = files.map(async (file) => {
             const fileRef = storageRef(storage, `contributions/${newContributionRef.id}/${file.originalname}`);
@@ -92,10 +85,10 @@ appExpress.post('/submitcontribution', uploadMulter.array('files'), async (req, 
 
         await Promise.all(promises);
 
-        res.status(200).send('Contribution submitted successfully.');
+        res.status(200).json({ success: true, message: 'Contribution submitted successfully.' });
     } catch (error) {
         console.error('Error during contribution submission:', error);
-        res.status(500).send('Internal Server Error.');
+        res.status(500).json({ success: false, message: 'Internal Server Error.' });
     }
 });
 
@@ -137,13 +130,12 @@ appExpress.get('/fetchprojects', async (req, res) => {
             const projectData = doc.data();
             projects.push({
                 id: doc.id,
-                contributorName: projectData.contributorName,
+                projectName: projectData.projectName,
                 contactNumber: projectData.contactNumber,
-                education: projectData.education,
                 projectType: projectData.projectType,
                 enableDownload: projectData.enableDownload,
                 expectedPrice: projectData.expectedPrice,
-                timestamp: projectData.timestamp,
+                timestamp: projectData.timestamp.toDate(),
                 // Add other fields as needed
             });
         });
@@ -154,31 +146,6 @@ appExpress.get('/fetchprojects', async (req, res) => {
         res.status(500).json({ success: false, message: 'Internal Server Error.' });
     }
 });
-
-appExpress.get('/userprofile', async (req, res) => {
-    try {
-        // Query Firestore for all documents in the Contributions collection
-        const contributionsRef = collection(db, 'Contributions');
-        const querySnapshot = await getDocs(contributionsRef);
-
-        const userProfileData = [];
-        querySnapshot.forEach(doc => {
-            const userData = doc.data();
-            // Extract only the required fields
-            userProfileData.push({
-                contributorName: userData.contributorName,
-                contactNumber: userData.contactNumber,
-                education: userData.education,
-            });
-        });
-
-        res.json({ success: true, userProfileData });
-    } catch (error) {
-        console.error('Error fetching user profile:', error);
-        res.status(500).json({ success: false, message: 'Internal Server Error.' });
-    }
-});
-
 
 // Start the server
 const PORT = process.env.PORT || 3000;
